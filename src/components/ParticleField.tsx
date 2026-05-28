@@ -241,7 +241,11 @@ export function ParticleField() {
     }, [])
 
     return (
-        <div ref={containerRef} className="w-full">
+        <div
+            ref={containerRef}
+            className="w-full max-w-[720px] mx-auto"
+            style={{ aspectRatio: ASPECT }}
+        >
             <canvas ref={canvasRef} className="block mx-auto" />
         </div>
     )
