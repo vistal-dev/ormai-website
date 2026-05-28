@@ -30,7 +30,15 @@ interface Particle {
     alpha: number
 }
 
-export function ParticleBackground() {
+interface ParticleBackgroundProps {
+    flipped?: boolean
+    className?: string
+}
+
+export function ParticleBackground({
+    flipped = false,
+    className = "h-screen",
+}: ParticleBackgroundProps = {}) {
     const containerRef = useRef<HTMLDivElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -51,7 +59,7 @@ export function ParticleBackground() {
         const buildParticles = () => {
             const next: Particle[] = []
             const cx = width / 2
-            const cy = 0
+            const cy = flipped ? height : 0
             const maxR = Math.hypot(width / 2, height)
             const cols = Math.floor(width / SPACING)
             const rows = Math.floor(height / SPACING)
@@ -62,7 +70,7 @@ export function ParticleBackground() {
                     const x = offX + i * SPACING
                     const y = offY + j * SPACING
                     const radial = Math.min(1, Math.hypot(x - cx, y - cy) / maxR)
-                    const vt = y / height
+                    const vt = flipped ? 1 - y / height : y / height
                     const intensity = (1 - radial * radial) * (1 - vt * vt * 0.6)
                     const threshold = (BAYER_8[j % 8][i % 8] + 0.5) / 64
                     if (intensity <= threshold) continue
@@ -154,7 +162,7 @@ export function ParticleBackground() {
     return (
         <div
             ref={containerRef}
-            className="absolute inset-x-0 top-0 h-screen pointer-events-none"
+            className={`absolute inset-x-0 -z-10 ${flipped ? "bottom-0" : "top-0"} pointer-events-none ${className}`}
         >
             <canvas ref={canvasRef} className="block" />
         </div>
