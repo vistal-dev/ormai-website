@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@plugin "tailwindcss-motion";
 
 @theme {
   --font-sans: "InterVariable", ui-sans-serif, system-ui, sans-serif;
