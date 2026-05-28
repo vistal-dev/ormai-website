@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+import {ParticleField} from "../components/ParticleField"
+import {ParticleBackground} from "../components/ParticleBackground"
+---
+
+<Layout>
+	<ParticleBackground client:load />
+	<div class="relative w-full flex flex-col gap-8 max-w-2xl mx-auto px-4 pt-32 md:pt-40 pb-24 md:pb-32 selection:bg-orange-600/20">
+		<ParticleField client:load />
+		 <h1 class="text-center text-3xl md:text-5xl text-pretty font-medium -mt-4 leading-9 md:leading-12 tracking-tight">The safest way for agents to access your database</h1>
+		 <div class="flex flex-row gap-4 mx-auto">
+			 <button class="h-12 w-40 rounded-md bg-fg text-bg text-sm font-medium cursor-pointer hover:-translate-y-0.5 transition-all">
+				Quick Start
+			</button>
+			 <button class="h-12 w-40 rounded-md bg-bg ring-[0.5px] ring-fg-faint text-sm text-fg-muted cursor-pointer hover:text-fg hover:ring-fg-muted transition-all hover:-translate-y-0.5 group">
+				<i class="ph ph-star pr-1 inline-block translate-y-[1px]"></i>
+				Star on GitHub
+			</button>
+		 </div>
+	</div>
+</Layout>

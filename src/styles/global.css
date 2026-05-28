@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@plugin "tailwindcss-motion";
+
+@theme {
+  --font-sans: "InterVariable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-bg: #0f1011;
+  --color-bg-elevated: #17181a;
+  --color-bg-muted: #1d1f22;
+  --color-surface: #25282c;
+
+  --color-border: #2a2d31;
+  --color-border-strong: #3a3e44;
+
+  --color-fg: #e4e4e7;
+  --color-fg-muted: #a1a1aa;
+  --color-fg-subtle: #71717a;
+  --color-fg-faint: #52525b;
+
+  --color-accent: #c4b5a0;
+  --color-accent-muted: #8a7e6c;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
