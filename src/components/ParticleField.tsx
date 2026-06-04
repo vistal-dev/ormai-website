@@ -10,7 +10,7 @@ const REPULSION_RADIUS = 110
 const REPULSION_FORCE = 3.5
 const SPRING = 0.06
 const DAMPING = 0.82
-const TEXT = "ormai"
+const TEXT = "vistal"
 
 const WAVE_SPEED = 5
 const WAVE_MAX_RADIUS = 280
