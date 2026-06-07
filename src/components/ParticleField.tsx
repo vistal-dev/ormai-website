@@ -10,7 +10,7 @@ const REPULSION_RADIUS = 110
 const REPULSION_FORCE = 3.5
 const SPRING = 0.06
 const DAMPING = 0.82
-const TEXT = "vistal"
+const TEXT = "riptide"
 
 const WAVE_SPEED = 5
 const WAVE_MAX_RADIUS = 280
@@ -18,9 +18,9 @@ const WAVE_BAND = 22
 const WAVE_FORCE = 2.5
 
 const COLOR_RADIUS = REPULSION_RADIUS
-const HOT_R = 240
-const HOT_G = 95
-const HOT_B = 25
+const HOT_R = 30
+const HOT_G = 20
+const HOT_B = 180
 
 const BAYER_8 = [
     [0, 32, 8, 40, 2, 34, 10, 42],
