@@ -17,6 +17,12 @@ const WAVE_MAX_RADIUS = 280
 const WAVE_BAND = 22
 const WAVE_FORCE = 2.5
 
+// Entry shockwave: expands from center, spawning particles as it passes over
+// their home positions and giving each an outward velocity kick so they snap
+// back into place via the spring.
+const ENTRY_DURATION = 700
+const ENTRY_KICK = 8
+
 const COLOR_RADIUS = REPULSION_RADIUS
 const HOT_R = 30
 const HOT_G = 20
@@ -46,6 +52,7 @@ interface Particle {
     vy: number
     hx: number
     hy: number
+    spawned: boolean
 }
 
 export function ParticleField() {
@@ -67,6 +74,13 @@ export function ParticleField() {
         let mouseX = -9999
         let mouseY = -9999
         let raf = 0
+        let entryStart: number | null = null
+        // Wait until the canvas is actually intersecting the viewport AND the
+        // tab is visible before starting the entry. After becoming eligible we
+        // defer one more frame so the browser has guaranteed a paint before the
+        // shockwave timer begins.
+        let inViewport = false
+        let entryReady = false
 
         const buildParticles = () => {
             const off = document.createElement("canvas")
@@ -96,6 +110,11 @@ export function ParticleField() {
             }
             const textHeight = Math.max(1, maxY - minY)
 
+            // If the entry has already finished, new particles (from a resize)
+            // should start in their settled state rather than re-triggering.
+            const entryDone =
+                entryStart !== null && performance.now() - entryStart >= ENTRY_DURATION
+
             for (let y = 0; y < height; y += SPACING) {
                 const vt = (y - minY) / textHeight
                 const centerY = 0.4
@@ -109,7 +128,7 @@ export function ParticleField() {
                     const bj = (x / SPACING) | 0
                     const threshold = (BAYER_8[bi % 8][bj % 8] + 0.5) / 64
                     if (intensity <= threshold) continue
-                    next.push({ x, y, vx: 0, vy: 0, hx: x, hy: y })
+                    next.push({ x, y, vx: 0, vy: 0, hx: x, hy: y, spawned: entryDone })
                 }
             }
             particles = next
@@ -132,6 +151,14 @@ export function ParticleField() {
 
         const ro = new ResizeObserver(resize)
         ro.observe(container)
+
+        const io = new IntersectionObserver(
+            ([entry]) => {
+                inViewport = entry.isIntersecting
+            },
+            { threshold: 0.05 },
+        )
+        io.observe(canvas)
 
         const startTick = () => {
             if (!raf) raf = requestAnimationFrame(tick)
@@ -182,7 +209,33 @@ export function ParticleField() {
             for (const w of waves) w.radius += waveSpeed
             waves = waves.filter(w => w.radius < waveMax)
 
+            // Expanding entry shockwave from canvas center. Hold the timer
+            // until the canvas is actually visible and the tab is in focus, and
+            // then defer one more frame so a paint has guaranteed happened.
+            if (entryStart === null && inViewport && !document.hidden) {
+                if (entryReady) entryStart = performance.now()
+                else entryReady = true
+            }
+            const cx = width / 2
+            const cy = height / 2
+            const entryMaxRadius = Math.hypot(width, height) / 2 + 20
+            const entryRadius =
+                entryStart === null
+                    ? 0
+                    : Math.min(1, (performance.now() - entryStart) / ENTRY_DURATION) * entryMaxRadius
+
             for (const p of particles) {
+                if (!p.spawned) {
+                    const ehx = p.hx - cx
+                    const ehy = p.hy - cy
+                    const homeDist = Math.hypot(ehx, ehy)
+                    if (entryRadius < homeDist) continue
+                    p.spawned = true
+                    const len = Math.max(1, homeDist)
+                    p.vx = (ehx / len) * ENTRY_KICK
+                    p.vy = (ehy / len) * ENTRY_KICK
+                }
+
                 const dx = p.x - mouseX
                 const dy = p.y - mouseY
                 const dist = Math.hypot(dx, dy)
@@ -234,6 +287,7 @@ export function ParticleField() {
         return () => {
             cancelAnimationFrame(raf)
             ro.disconnect()
+            io.disconnect()
             window.removeEventListener("mousemove", onMove)
             window.removeEventListener("mouseleave", onLeave)
             canvas.removeEventListener("click", onClick)
