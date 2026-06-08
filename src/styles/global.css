@@ -31,5 +31,8 @@ html,
 body {
   background-color: var(--color-bg);
   color: var(--color-fg);
-  overflow-x: hidden;
+}
+
+html {
+  overflow-x: clip;
 }

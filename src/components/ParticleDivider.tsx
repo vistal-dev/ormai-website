@@ -174,7 +174,7 @@ export function ParticleDivider({ className = "h-12" }: ParticleDividerProps = {
 
     return (
         <div ref={containerRef} className={`w-full ${className}`}>
-            <canvas ref={canvasRef} className="block" />
+            <canvas ref={canvasRef} className="block touch-pan-y" />
         </div>
     )
 }

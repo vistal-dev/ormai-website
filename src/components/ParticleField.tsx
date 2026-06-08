@@ -300,7 +300,7 @@ export function ParticleField() {
             className="w-full max-w-[720px] mx-auto"
             style={{ aspectRatio: ASPECT }}
         >
-            <canvas ref={canvasRef} className="block mx-auto" />
+            <canvas ref={canvasRef} className="block mx-auto touch-manipulation" />
         </div>
     )
 }
