@@ -37,7 +37,7 @@ interface ParticleBackgroundProps {
 
 export function ParticleBackground({
     flipped = false,
-    className = "h-dvh",
+    className = "h-lvh",
 }: ParticleBackgroundProps = {}) {
     const containerRef = useRef<HTMLDivElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
