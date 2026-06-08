@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "tailwindcss-motion";
 
 @theme {
   --font-sans: "InterVariable", ui-sans-serif, system-ui, sans-serif;
@@ -23,10 +24,12 @@
 
 :root {
   color-scheme: dark;
+  isolation: isolate;
 }
 
 html,
 body {
   background-color: var(--color-bg);
   color: var(--color-fg);
+  overflow-x: hidden;
 }
